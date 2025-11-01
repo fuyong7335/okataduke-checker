@@ -135,8 +135,7 @@ if submitted:
     type_label = TYPES[top_type]
     link_url = TYPE_LINKS[top_type]
 
-    st.markdown(f"""
-<a href="{link_url}" target="_blank">
-    <button style='padding:10px 18px; font-size:16px;'>📩 アドバイスを受け取る（無料）</button>
-</a>
-""", unsafe_allow_html=True)
+    st.markdown("## 🔍 診断結果")
+st.markdown(f"あなたは **{type_label}** かもしれません。")
+st.write("あなたのタイプに合ったアドバイスを受け取りたい方は、以下のボタンをクリックしてください👇")
+st.markdown(f"[📩 アドバイスを受け取る（無料）]({link_url})")
