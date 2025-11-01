@@ -136,6 +136,6 @@ if submitted:
     link_url = TYPE_LINKS[top_type]
 
     st.markdown("## 🔍 診断結果")
-st.markdown(f"あなたは **{type_label}** かもしれません。")
-st.write("あなたのタイプに合ったアドバイスを受け取りたい方は、以下のボタンをクリックしてください👇")
-st.markdown(f"[📩 アドバイスを受け取る（無料）]({link_url})")
+    st.markdown(f"あなたは **{type_label}** かもしれません。")
+    st.markdown("あなたのタイプに合ったアドバイスを受け取るには、以下をクリックしてください：")
+    st.markdown(f"[📩 アドバイスを受け取る（無料）]({link_url})")
