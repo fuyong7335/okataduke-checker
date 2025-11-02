@@ -138,4 +138,4 @@ if submitted:
     st.markdown("## 🔍 診断結果")
     st.markdown(f"あなたは **{type_label}** かもしれません。")
     st.markdown("あなたのタイプに合ったアドバイスを受け取るには、以下をクリックしてください：")
-    st.markdown(f"[📩 アドバイスを受け取る（無料）]({link_url})")
+    st.markdown(f"[📩 アドバイスを受けとる]({link_url})")
