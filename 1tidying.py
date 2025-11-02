@@ -135,6 +135,10 @@ if submitted:
     type_label = TYPES[top_type]
     link_url = TYPE_LINKS[top_type]
 
+  # 🔽 この1行を追加するだけ！
+    link_url = TYPE_LINKS[top_type]
+
+
     st.markdown("## 🔍 診断結果")
     st.markdown(f"あなたは **{type_label}** かもしれません。")
     st.write("あなたにぴったりのアドバイスはコチラから受け取れます👇")
