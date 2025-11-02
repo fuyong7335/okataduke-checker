@@ -2,13 +2,16 @@ from PIL import Image
 import streamlit as st
 import base64
 
-# タイプ別リンク（仮リンク → 後でリザストLPに差し替え）
+# 🔽🔽🔽 ここにこの部分を追加 🔽🔽🔽
 TYPE_LINKS = {
-    'freeze': 'https://example.com/freeze',
-    'emotion': 'https://example.com/emotion',
-    'burnout': 'https://example.com/burnout',
-    'family': 'https://example.com/family'
+    'freeze': 'https://okataduke-demo.onrender.com/1',
+    'emotion': 'https://okataduke-demo.onrender.com/2',
+    'burnout': 'https://okataduke-demo.onrender.com/3',
+    'family': 'https://okataduke-demo.onrender.com/4',
 }
+# 🔼🔼🔼 ここまで 🔼🔼🔼
+
+
 
 # 画像をbase64に変換してHTMLに埋め込む
 def get_base64_image(image_path):
