@@ -140,5 +140,4 @@ if submitted:
 
     st.markdown("## 🔍 診断結果")
     st.markdown(f"あなたは **{type_label}** かもしれません。")
-    st.write("あなたにぴったりのアドバイスはコチラから受け取れます👇")
-    st.markdown(f"[📩 おかたづけアドバイスを受けとる]({link_url})")
+       st.markdown(f"[📩 おかたづけアドバイスを受けとる]({link_url})")
