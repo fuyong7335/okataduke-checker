@@ -4,10 +4,10 @@ import base64
 
 # 🔽🔽🔽 ここにこの部分を追加 🔽🔽🔽
 TYPE_LINKS = {
-    'freeze': 'https://okataduke-demo.onrender.com/1',
-    'emotion': 'https://okataduke-demo.onrender.com/2',
-    'burnout': 'https://okataduke-demo.onrender.com/3',
-    'family': 'https://okataduke-demo.onrender.com/4',
+    'freeze': 'https://okataduke-freeze.onrender.com',
+    'emotion': 'https://okataduke-emotion.onrender.com',
+    'burnout': 'https://okataduke-burnout.onrender.com',
+    'family': 'https://okataduke-family.onrender.com',
 }
 # 🔼🔼🔼 ここまで 🔼🔼🔼
 
