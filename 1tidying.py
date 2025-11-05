@@ -1,52 +1,61 @@
 from PIL import Image
 import streamlit as st
 import base64
+import os # osモジュールを追加
 
-# 🔽🔽🔽 ここにこの部分を追加 🔽🔽🔽
+# --- タイプ別リンク ---
 TYPE_LINKS = {
     'freeze': 'https://okataduke-freeze.onrender.com',
     'emotion': 'https://okataduke-emotion.onrender.com',
     'burnout': 'https://okataduke-burnout.onrender.com',
     'family': 'https://okataduke-family.onrender.com',
 }
-# 🔼🔼🔼 ここまで 🔼🔼🔼
 
-
-
-# 画像をbase64に変換してHTMLに埋め込む
+# --- 画像をbase64に変換してHTMLに埋め込む ---
 def get_base64_image(image_path):
-    with open(image_path, "rb") as image_file:
-        encoded = base64.b64encode(image_file.read()).decode()
-    return encoded
+    # ファイルが存在するかチェック
+    if not os.path.exists(image_path):
+        st.error(f"エラー: 画像ファイルが見つかりません: {image_path}")
+        return None
+        
+    try:
+        with open(image_path, "rb") as image_file:
+            encoded = base64.b64encode(image_file.read()).decode()
+        return encoded
+    except Exception as e:
+        st.error(f"画像読み込みエラー: {e}")
+        return None
 
-# ロゴ画像とリンク
+# --- ロゴ画像とリンク ---
+# 'logo.jpg' がスクリプトと同じディレクトリにあることを想定
 image_base64 = get_base64_image("logo.jpg")
 homepage_url = "https://rakulife.jp/"
 
-st.markdown(
-    f"""
-    <a href="{homepage_url}" target="_blank">
-        <img src="data:image/png;base64,{image_base64}" width="150">
-    </a>
-    """,
-    unsafe_allow_html=True
-)
+if image_base64: # 画像が正常に読み込めた場合のみ表示
+    st.markdown(
+        f"""
+        <a href="{homepage_url}" target="_blank">
+            <img src="data:image/png;base64,{image_base64}" width="150" alt="ロゴ画像">
+        </a>
+        """,
+        unsafe_allow_html=True
+    )
 
-# フォント変更（明朝系）
+# --- フォント変更（明朝系） ---
 st.markdown("""
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap');
-    html, body, [class*="css"] {
-        font-family: 'Noto Serif JP', serif;
-    }
-    </style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap');
+html, body, [class*="css"] {
+    font-family: 'Noto Serif JP', serif;
+}
+</style>
 """, unsafe_allow_html=True)
 
-# アプリタイトルと説明
+# --- アプリタイトルと説明 ---
 st.title("🧹 おかたづけタイプ診断")
 st.write("10問に答えるだけで、あなたの片づけ傾向が分かります！")
 
-# タイプ分類
+# --- タイプ分類 ---
 TYPES = {
     'freeze': '思考フリーズタイプ',
     'emotion': '感情ためこみタイプ',
@@ -54,7 +63,7 @@ TYPES = {
     'family': '散らかされタイプ'
 }
 
-# 質問と選択肢
+# --- 質問と選択肢 ---
 questions = [
     ("Q1. 片づけが進まないとき、どう感じますか？", [
         ("やるべきことが多すぎて動けない", 'freeze'),
@@ -84,7 +93,7 @@ questions = [
         ("何がどこにあるかすぐに分かる状態", 'freeze'),
         ("思い出の品も大切にしつつ、すっきりしている", 'emotion'),
         ("掃除がラクで、効率的に保てる状態", 'burnout'),
-        ("家族も使いやすく、散らかりにくい空間", 'family')
+        ("家族も使いやすく、散らかかりにくい空間", 'family') # (タイポ修正: 散らか"か"りにくい)
     ]),
     ("Q6. 「片付けなきゃ」と思った時、どう反応しますか？", [
         ("どこから始めればいいか分からず止まる", 'freeze'),
@@ -118,26 +127,45 @@ questions = [
     ])
 ]
 
-# 回答カウント初期化
+# --- 回答カウント初期化 ---
 scores = {'freeze': 0, 'emotion': 0, 'burnout': 0, 'family': 0}
 
-# 診断フォーム
+# --- 診断フォーム ---
 with st.form("diagnosis_form"):
     for idx, (question, options) in enumerate(questions):
         items = [label for label, _ in options]
-        answer = st.radio(question, items, key=f"q{idx}")
-        for label, type_key in options:
-            if answer == label:
-                scores[type_key] += 1
-                break
+        # フォーム内のラジオボタンのデフォルト選択を未選択（None）にするため index=None を追加
+        answer = st.radio(question, items, key=f"q{idx}", index=None) 
+        
+        # 回答が選択されている場合のみスコアを加算
+        if answer:
+            for label, type_key in options:
+                if answer == label:
+                    scores[type_key] += 1
+                    break
+
     submitted = st.form_submit_button("診断する")
 
-# 結果表示
+# --- 結果表示 ---
 if submitted:
-    top_type = max(scores, key=scores.get)
-    type_label = TYPES[top_type]
-    link_url = TYPE_LINKS[top_type]  # ← タイプごとのURLを取得
+    # すべての質問に答えたかチェック
+    all_answered = all(st.session_state[f"q{idx}"] is not None for idx in range(len(questions)))
 
-    st.markdown("## 🔍 診断結果")
-    st.markdown(f"あなたは **{type_label}** かもしれません。")
-    st.markdown(f"[📩 おかたづけアドバイスを受けとる]({link_url})")
+    if not all_answered:
+        st.warning("すべての質問に回答してください。")
+    else:
+        top_type = max(scores, key=scores.get)
+        type_label = TYPES[top_type]
+        link_url = TYPE_LINKS[top_type]
+
+        st.markdown("## 🔍 診断結果")
+        st.markdown(f"あなたは **{type_label}** かもしれません。")
+
+        # 🔽🔽🔽 この2行を C案 (無料・読む) に変更しました 🔽🔽🔽
+        st.write("あなたにぴったりの（無料）アドバイスはコチラ👇")  
+        st.markdown(f"[📩 あなたのタイプ別アドバイスを（無料）で読む]({link_url})", unsafe_allow_html=True)
+        # 🔼🔼🔼 ここまで 🔼🔼🔼
+
+# (オプション) フッターやコピーライト
+st.markdown("---")
+st.caption("(C) 2025 RakuLife. All rights reserved.")
