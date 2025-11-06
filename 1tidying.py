@@ -131,15 +131,14 @@ with st.form("diagnosis_form"):
                 scores[type_key] += 1
                 break
     submitted = st.form_submit_button("診断する")
-
 # 結果表示
 if submitted:
     top_type = max(scores, key=scores.get)
     type_label = TYPES[top_type]
     link_url = TYPE_LINKS[top_type]  # ← タイプごとのURLを取得
 
-  # 🔍 診断結果の表示
-st.markdown("## 🔍 診断結果")
-st.markdown(f"あなたは **{type_label}** かもしれません。")
-st.write("あなたにぴったりのアドバイスはコチラから受け取れます👇")
-st.markdown(f"[📩 おかたづけアドバイスを受けとる]({link_url})", unsafe_allow_html=True)
+    # 🔍 診断結果の表示（この中はすべてインデントをそろえる）
+    st.markdown("## 🔍 診断結果")
+    st.markdown(f"あなたは **{type_label}** かもしれません。")
+    st.write("あなたにぴったりのアドバイスはコチラから受け取れます👇")
+    st.markdown(f"[📩 おかたづけアドバイスを受けとる]({link_url})", unsafe_allow_html=True)
