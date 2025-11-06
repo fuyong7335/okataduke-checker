@@ -135,4 +135,4 @@ if submitted:
 
     st.markdown("## 🔍 診断結果")
     st.markdown(f"あなたは **「{type_label}」** のようです。")
-    st.markdown(f"[詳しいアドバイスはこちら]({link_url})")
+    st.markdown(f"**詳しいアドバイス** [🔗 こちらから]({link_url})")
