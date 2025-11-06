@@ -1,38 +1,46 @@
-from PIL import Image
 import streamlit as st
+from PIL import Image
 import base64
+import os
 
-# 🔽🔽🔽 ここにこの部分を追加 🔽🔽🔽
+# --- タイプ別リンク ---
 TYPE_LINKS = {
     'freeze': 'https://okataduke-freeze.onrender.com',
     'emotion': 'https://okataduke-emotion.onrender.com',
     'burnout': 'https://okataduke-burnout.onrender.com',
     'family': 'https://okataduke-family.onrender.com',
 }
-# 🔼🔼🔼 ここまで 🔼🔼🔼
 
+# --- タイプ表示 ---
+TYPES = {
+    'freeze': '思考フリーズタイプ',
+    'emotion': '感情ためこみタイプ',
+    'burnout': '一気に燃え尽きタイプ',
+    'family': '振り回されタイプ'
+}
 
-
-# 画像をbase64に変換してHTMLに埋め込む
+# --- ロゴ画像を読み込み（base64） ---
 def get_base64_image(image_path):
+    if not os.path.exists(image_path):
+        return None
     with open(image_path, "rb") as image_file:
         encoded = base64.b64encode(image_file.read()).decode()
     return encoded
 
-# ロゴ画像とリンク
+# --- ロゴ表示 ---
 image_base64 = get_base64_image("logo.jpg")
 homepage_url = "https://rakulife.jp/"
+if image_base64:
+    st.markdown(
+        f"""
+        <a href="{homepage_url}" target="_blank">
+            <img src="data:image/png;base64,{image_base64}" width="150">
+        </a>
+        """,
+        unsafe_allow_html=True
+    )
 
-st.markdown(
-    f"""
-    <a href="{homepage_url}" target="_blank">
-        <img src="data:image/png;base64,{image_base64}" width="150">
-    </a>
-    """,
-    unsafe_allow_html=True
-)
-
-# フォント変更（明朝系）
+# --- フォント変更 ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap');
@@ -42,19 +50,11 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# アプリタイトルと説明
+# --- アプリタイトル ---
 st.title("🧹 おかたづけタイプ診断")
 st.write("10問に答えるだけで、あなたの片づけ傾向が分かります！")
 
-# タイプ分類
-TYPES = {
-    'freeze': '思考フリーズタイプ',
-    'emotion': '感情ためこみタイプ',
-    'burnout': '一気に燃え尽きタイプ',
-    'family': '振り回されタイプ'
-}
-
-# 質問と選択肢
+# --- 質問と選択肢 ---
 questions = [
     ("Q1. 片づけが進まないとき、どう感じますか？", [
         ("やるべきことが多すぎて動けない", 'freeze'),
@@ -118,10 +118,10 @@ questions = [
     ])
 ]
 
-# 回答カウント初期化
+# --- スコア初期化 ---
 scores = {'freeze': 0, 'emotion': 0, 'burnout': 0, 'family': 0}
 
-# 診断フォーム
+# --- フォーム作成 ---
 with st.form("diagnosis_form"):
     for idx, (question, options) in enumerate(questions):
         items = [label for label, _ in options]
@@ -131,14 +131,14 @@ with st.form("diagnosis_form"):
                 scores[type_key] += 1
                 break
     submitted = st.form_submit_button("診断する")
-# 結果表示
+
+# --- 診断結果の表示 ---
 if submitted:
     top_type = max(scores, key=scores.get)
     type_label = TYPES[top_type]
-    link_url = TYPE_LINKS[top_type]  # ← タイプごとのURLを取得
+    link_url = TYPE_LINKS[top_type]
 
-    # 🔍 診断結果の表示（この中はすべてインデントをそろえる）
     st.markdown("## 🔍 診断結果")
-    st.markdown(f"あなたは **{type_label}** かもしれません。")
-    st.write("あなたにぴったりのアドバイスはコチラから受け取れます👇")
-    st.markdown(f"[📩 おかたづけアドバイスを受けとる]({link_url})", unsafe_allow_html=True)
+    st.markdown(f"あなたは **{type_label}** のようです。")
+    st.write("あなたにぴったりのアドバイスはこちら👇")
+    st.markdown(f"[📩 アドバイスを無料で受け取る]({link_url})", unsafe_allow_html=True)
