@@ -138,7 +138,8 @@ if submitted:
     type_label = TYPES[top_type]
     link_url = TYPE_LINKS[top_type]  # ← タイプごとのURLを取得
 
-    st.markdown("## 🔍 診断結果")
-    st.markdown(f"あなたは **{type_label}** かもしれません。")
-    st.write("あなたにぴったりのアドバイスはコチラから受け取れます👇")
-    st.markdown(f"[📩 おかたづけアドバイスを受けとる]({link_url})"),unsafe_allow_html=True)
+  # 🔍 診断結果の表示
+st.markdown("## 🔍 診断結果")
+st.markdown(f"あなたは **{type_label}** かもしれません。")
+st.write("あなたにぴったりのアドバイスはコチラから受け取れます👇")
+st.markdown(f"[📩 おかたづけアドバイスを受けとる]({link_url})", unsafe_allow_html=True)
